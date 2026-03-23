@@ -20,7 +20,6 @@ let config = null;
 
 // Media caching
 let lastHeroImageUrl = null;
-let lastHeroBgUrl = null;
 const mediaPreloadCache = new Map();
 
 // View references

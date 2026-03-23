@@ -3,7 +3,6 @@
  * Handles image/video preloading and rendering with memory management
  */
 
-// Debounce timer for rapid navigation
 let mediaUpdateDebounceTimer = null;
 
 function preloadImage(url) {
@@ -16,7 +15,6 @@ function preloadImage(url) {
   const promise = img.decode ? img.decode().catch(() => {}) : Promise.resolve();
   mediaPreloadCache.set(url, promise);
 
-  // Keep cache smaller - only 6 most recent
   if (mediaPreloadCache.size > 6) {
     const firstKey = mediaPreloadCache.keys().next().value;
     mediaPreloadCache.delete(firstKey);
@@ -26,14 +24,12 @@ function preloadImage(url) {
 function preloadNearbyMedia() {
   if (!vpin.tableData || vpin.getTableCount() === 0) return;
 
-  // Only preload images for immediate neighbors, NOT videos (too heavy)
   const indices = [
     wrapIndex(currentTableIndex - 1, vpin.getTableCount()),
     wrapIndex(currentTableIndex + 1, vpin.getTableCount()),
   ];
 
   indices.forEach((index) => {
-    // Only preload wheel images (lightweight)
     preloadImage(vpin.getImageURL(index, "wheel"));
     preloadImage(vpin.getImageURL(index, "cab"));
   });
@@ -42,19 +38,16 @@ function preloadNearbyMedia() {
 function cleanupMediaElement(element) {
   if (!element) return;
 
-  // Stop and cleanup video elements
   if (element.tagName === "VIDEO") {
     element.pause();
     element.removeAttribute("src");
-    element.load(); // Force release of video buffer
+    element.load();
   }
 
-  // Clear image sources
   if (element.tagName === "IMG") {
     element.removeAttribute("src");
   }
 
-  // Recursively cleanup children
   const videos = element.querySelectorAll("video");
   videos.forEach((video) => {
     video.pause();
@@ -111,15 +104,16 @@ function createMediaElement(videoUrl, imageUrl, title, fitMode = "cover") {
   if (hasUsableMedia(videoUrl)) {
     const video = document.createElement("video");
     video.src = videoUrl;
-    video.poster = imageUrl;
+    if (hasUsableMedia(imageUrl)) {
+      video.poster = imageUrl;
+    }
     video.autoplay = true;
     video.loop = true;
     video.muted = true;
     video.playsInline = true;
-    video.preload = "metadata"; // Don't preload full video
+    video.preload = "metadata";
     video.style.cssText = `width: 100%; height: 100%; object-fit: ${objectFit};`;
     video.onerror = () => {
-      // Fallback to image on video error
       if (hasUsableMedia(imageUrl)) {
         const img = document.createElement("img");
         img.src = imageUrl;
