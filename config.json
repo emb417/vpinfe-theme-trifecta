@@ -1,0 +1,38 @@
+{
+  "_comment": "Trifecta Theme Configuration - Optional customization settings",
+
+  "audio": {
+    "enabled": true,
+    "volume": 0.8,
+    "fadeDuration": 500
+  },
+
+  "carousel": {
+    "visibleItems": 5,
+    "animationSpeed": 520,
+    "preloadNearby": true
+  },
+
+  "media": {
+    "preferVideo": true,
+    "videoAutoplay": true,
+    "fallbackToImage": true,
+    "preloadImages": true
+  },
+
+  "screens": {
+    "backglass": {
+      "enabled": true,
+      "showVideo": true
+    },
+    "dmd": {
+      "enabled": true,
+      "showVideo": true
+    }
+  },
+
+  "transitions": {
+    "fadeDuration": 800,
+    "mediaTransition": 180
+  }
+}

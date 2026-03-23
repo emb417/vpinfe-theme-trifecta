@@ -1,0 +1,123 @@
+/**
+ * Base Styles
+ * CSS variables, resets, and foundational styles
+ */
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background:
+        radial-gradient(circle at 16% 16%, rgba(255, 115, 43, 0.24), transparent 24%),
+        radial-gradient(circle at 82% 14%, rgba(255, 196, 78, 0.2), transparent 22%),
+        radial-gradient(circle at 72% 76%, rgba(19, 168, 184, 0.14), transparent 28%),
+        linear-gradient(180deg, #1a1210 0%, #0a0d12 52%, #020304 100%);
+    color: #fff8ee;
+    overflow: hidden;
+    font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+}
+
+/* Backglass screen (landscape) */
+body.bg-screen {
+    background: #000;
+}
+
+body.bg-screen #rootContainer {
+    background: #000;
+}
+
+/* DMD screen (landscape) */
+body.dmd-screen {
+    background: #000;
+}
+
+body.dmd-screen #rootContainer {
+    background: #000;
+}
+
+#rootContainer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#tableViewport {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#tableScreen {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    transform-origin: center center;
+    visibility: hidden;
+}
+
+#overlay-root {
+    transform-origin: center center;
+}
+
+/* Fade overlay for screen transitions (table launch/return) */
+#fadeOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+    pointer-events: none;
+    z-index: 9998;
+}
+
+#fadeOverlay.show {
+    opacity: 1;
+}
+
+/* Remote launch overlay */
+#remote-launch-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#remote-launch-overlay>div {
+    color: white;
+    font-size: 3em;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+#remote-launch-overlay>div>div:first-child {
+    margin-bottom: 20px;
+}
+
+#remote-launch-table-name {
+    font-size: 1.5em;
+    color: #4CAF50;
+}
+
+.empty-state {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}

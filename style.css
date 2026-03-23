@@ -1,0 +1,12 @@
+/**
+ * Trifecta Theme - Master Stylesheet
+ * 3-Screen Cabinet Edition
+ */
+
+/* Core Styles */
+@import url('css/base.css');
+@import url('css/layout.css');
+
+/* Components */
+@import url('css/carousel.css');
+@import url('css/hero-media.css');
