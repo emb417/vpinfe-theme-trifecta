@@ -3,83 +3,68 @@
  * 3-Screen Cabinet Edition
  */
 
-// Initialize VPinFECore
 const vpin = new VPinFECore();
 vpin.init();
-window.vpin = vpin; // Main menu needs this
+window.vpin = vpin;
 
-// Register receiveEvent globally BEFORE vpin.ready
 window.receiveEvent = receiveEvent;
 
-// Wait for VPinFECore to be ready
 vpin.ready.then(async () => {
+  await vpin.call("get_my_window_name").then((result) => {
+    windowName = result;
+  });
 
-    // Get window name (table, bg, or dmd)
-    await vpin.call("get_my_window_name")
-        .then(result => {
-            windowName = result;
-        });
+  vpin.registerInputHandler(handleInput);
 
-    // Register input handler (table window only)
-    vpin.registerInputHandler(handleInput);
+  config = await vpin.call("get_theme_config");
 
-    // Load optional config.json
-    config = await vpin.call("get_theme_config");
+  if (windowName === "table") {
+    await applyTableLayout();
+    window.addEventListener("resize", () => {
+      applyTableLayout().then(() => {
+        updateTableWindow();
+      });
+    });
+  }
 
-    // Apply layout for table window
+  const initializeDisplay = async () => {
+    if (!vpin.tableData || vpin.tableData.length === 0) {
+      return false;
+    }
+
+    const initialIndex = await vpin
+      .call("get_current_table_index")
+      .catch(() => {
+        return 0;
+      });
+    currentTableIndex = initialIndex || 0;
+
     if (windowName === "table") {
-        await applyTableLayout();
-        window.addEventListener('resize', () => {
-            applyTableLayout().then(() => {
-                updateTableWindow();
-            });
+      updateScreen();
+
+      setTimeout(() => {
+        vpin.sendMessageToAllWindows({
+          type: "TableIndexUpdate",
+          index: currentTableIndex,
         });
+      }, 500);
     }
 
-    // Wait for table data to be ready before initial render
-    const initializeDisplay = async () => {
-        if (!vpin.tableData || vpin.tableData.length === 0) {
-            return false;
-        }
+    return true;
+  };
 
-        // Get the current table index from VPinFE
-        const initialIndex = await vpin.call("get_current_table_index").catch(() => {
-            return 0;
-        });
-        currentTableIndex = initialIndex || 0;
-        
-        // ONLY TABLE WINDOW renders immediately
-        // BG/DMD wait for TableIndexUpdate message
-        if (windowName === "table") {
-            updateScreen();
-            
-            // Broadcast after a short delay to ensure BG/DMD are ready
-            setTimeout(() => {
-                vpin.sendMessageToAllWindows({
-                    type: 'TableIndexUpdate',
-                    index: currentTableIndex
-                });
-            }, 100);
-        }
-        
-        return true;
-    };
+  const initialized = await initializeDisplay();
 
-    // Try immediate initialization
-    const initialized = await initializeDisplay();
-    
-    // If not initialized, poll for data
-    if (!initialized) {
-        const checkData = setInterval(async () => {
-            const success = await initializeDisplay();
-            if (success) {
-                clearInterval(checkData);
-            }
-        }, 100);
-        
-        // Timeout after 10 seconds
-        setTimeout(() => {
-            clearInterval(checkData);
-        }, 10000);
-    }
+  if (!initialized) {
+    const checkData = setInterval(async () => {
+      const success = await initializeDisplay();
+      if (success) {
+        clearInterval(checkData);
+      }
+    }, 100);
+
+    setTimeout(() => {
+      clearInterval(checkData);
+    }, 10000);
+  }
 });
