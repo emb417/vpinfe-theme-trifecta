@@ -45,7 +45,7 @@
     padding: 2rem 3rem 1rem 3rem;
 }
 
-/* Row 2: Info (3 centered rows) */
+/* Row 2: Info (3 centered rows with fixed heights) */
 .info-row {
     flex: 0 0 auto;
     padding: 0 3rem 1.5rem 3rem;
@@ -53,6 +53,8 @@
     flex-direction: column;
     gap: 0.25rem;
     align-items: center;
+    justify-content: center;
+    min-height: 80px;
 }
 
 .info-line {
@@ -62,10 +64,12 @@
     gap: 0.6rem;
     white-space: nowrap;
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+    min-height: 1.4rem;
+    /* Fixed height per line to prevent collapse */
 }
 
 .info-line-title {
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: #fff;
     font-weight: 500;
 }
@@ -87,7 +91,10 @@
 }
 
 .manufacturer,
-.year,
+.year {
+    color: #ffb95d;
+}
+
 .version {
     color: #ffb95d;
 }
@@ -95,6 +102,12 @@
 .table-authors {
     color: rgba(255, 255, 255, 0.7);
     font-style: italic;
+}
+
+/* Empty line takes up space but shows nothing */
+.info-line:empty::after {
+    content: '\00A0';
+    /* Non-breaking space to maintain height */
 }
 
 .empty-state {
