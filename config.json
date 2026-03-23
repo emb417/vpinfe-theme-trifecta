@@ -7,6 +7,13 @@
     "fadeDuration": 500
   },
 
+  "input": {
+    "keymap": {
+      "ControlRight": "collection",
+      "Digit1": "select"
+    }
+  },
+
   "carousel": {
     "visibleItems": 5,
     "animationSpeed": 520,

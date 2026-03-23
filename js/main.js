@@ -18,12 +18,24 @@ vpin.ready.then(async () => {
 
   config = await vpin.call("get_theme_config");
 
+  const keymap = (config && config.input && config.input.keymap) || {};
+
   if (windowName === "table") {
     await applyTableLayout();
     window.addEventListener("resize", () => {
       applyTableLayout().then(() => {
         updateTableWindow();
       });
+    });
+    window.addEventListener("keydown", (e) => {
+      const action =
+        keymap[e.code] || keymap[e.key] || keymap[e.key.toLowerCase()];
+
+      if (action === "collection") {
+        vpin.toggleCollectionMenu();
+      } else if (action === "select") {
+        handleInput("joyselect");
+      }
     });
   }
 
