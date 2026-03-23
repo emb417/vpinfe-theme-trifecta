@@ -2,8 +2,8 @@
   "_comment": "Trifecta Theme Configuration - Optional customization settings",
 
   "audio": {
-    "enabled": true,
-    "volume": 0.8,
+    "enabled": false,
+    "volume": 0.2,
     "fadeDuration": 500
   },
 

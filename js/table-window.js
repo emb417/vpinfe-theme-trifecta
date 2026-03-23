@@ -6,7 +6,6 @@
 function updateScreen() {
   if (windowName === "table") {
     updateTableWindow();
-    tableAudio.play(vpin.getAudioURL(currentTableIndex));
     preloadNearbyMedia();
   } else if (windowName === "bg") {
     updateBGWindow();
@@ -39,32 +38,25 @@ function updateTableWindow() {
   const versionDisplay = version ? "v" + version : "";
   const authorsRaw = info.Authors || [];
 
-  // Truncate authors to first 3, add "+" if more
   const authors = truncateAuthors(authorsRaw);
 
-  // Update carousel
   updateWheelCarousel(tableView);
 
-  // Update table info
   setNodeText(tableView.title, title);
   setNodeText(tableView.manufacturer, manufacturer);
   setNodeText(tableView.year, year);
   setNodeText(tableView.version, versionDisplay);
   setNodeText(tableView.authors, authors);
 
-  // Hide separators for empty fields
   if (tableView.manufacturerSeparator) {
-    // Hide separator between manufacturer and year if either is empty
     tableView.manufacturerSeparator.style.display =
       manufacturer && year ? "" : "none";
   }
   if (tableView.versionSeparator) {
-    // Hide separator between year and version if either is empty
     tableView.versionSeparator.style.display =
       year && versionDisplay ? "" : "none";
   }
 
-  // Update hero media
   updateHeroMedia(tableView.heroMedia, title);
 
   lastRenderedTableIndex = currentTableIndex;
@@ -74,7 +66,6 @@ function updateTableWindow() {
 function truncateAuthors(authors) {
   if (!authors) return "";
 
-  // Convert to array if string
   let authorArray = authors;
   if (typeof authors === "string") {
     authorArray = authors
@@ -85,10 +76,8 @@ function truncateAuthors(authors) {
 
   if (!Array.isArray(authorArray) || authorArray.length === 0) return "";
 
-  // Take first 3
   const displayAuthors = authorArray.slice(0, 3);
 
-  // Add "+" if there are more
   if (authorArray.length > 3) {
     return displayAuthors.join(", ") + " +" + (authorArray.length - 3);
   }

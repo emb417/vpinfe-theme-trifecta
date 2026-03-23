@@ -5,6 +5,7 @@
 
 async function receiveEvent(message) {
   vpin.call("console_out", message);
+
   await vpin.handleEvent(message);
 
   switch (message.type) {
@@ -14,9 +15,6 @@ async function receiveEvent(message) {
       break;
 
     case "TableLaunching":
-      if (windowName === "table") {
-        tableAudio.stop();
-      }
       document.querySelectorAll("video").forEach((v) => v.pause());
       fadeOut();
       break;
@@ -28,15 +26,9 @@ async function receiveEvent(message) {
           .querySelectorAll("video")
           .forEach((v) => v.play().catch(() => {}));
       }, 100);
-      if (windowName === "table") {
-        tableAudio.play(vpin.getAudioURL(currentTableIndex));
-      }
       break;
 
     case "RemoteLaunching":
-      if (windowName === "table") {
-        tableAudio.stop();
-      }
       document.querySelectorAll("video").forEach((v) => v.pause());
       showRemoteLaunchOverlay(message.table_name);
       fadeOut();
@@ -50,9 +42,6 @@ async function receiveEvent(message) {
           .querySelectorAll("video")
           .forEach((v) => v.play().catch(() => {}));
       }, 100);
-      if (windowName === "table") {
-        tableAudio.play(vpin.getAudioURL(currentTableIndex));
-      }
       break;
 
     case "TableDataChange":

@@ -4,40 +4,43 @@
  */
 
 async function handleInput(input) {
-    switch (input) {
-        case "joyleft":
-            lastWheelMoveDirection = -1;
-            currentTableIndex = wrapIndex(currentTableIndex - 1, vpin.tableData.length);
-            updateScreen();
+  switch (input) {
+    case "joyleft":
+      lastWheelMoveDirection = -1;
+      currentTableIndex = wrapIndex(
+        currentTableIndex - 1,
+        vpin.tableData.length,
+      );
+      updateScreen();
 
-            // Tell other windows the table index changed
-            vpin.sendMessageToAllWindows({
-                type: 'TableIndexUpdate',
-                index: currentTableIndex
-            });
-            break;
+      vpin.sendMessageToAllWindows({
+        type: "TableIndexUpdate",
+        index: currentTableIndex,
+      });
+      break;
 
-        case "joyright":
-            lastWheelMoveDirection = 1;
-            currentTableIndex = wrapIndex(currentTableIndex + 1, vpin.tableData.length);
-            updateScreen();
+    case "joyright":
+      lastWheelMoveDirection = 1;
+      currentTableIndex = wrapIndex(
+        currentTableIndex + 1,
+        vpin.tableData.length,
+      );
+      updateScreen();
 
-            // Tell other windows the table index changed
-            vpin.sendMessageToAllWindows({
-                type: 'TableIndexUpdate',
-                index: currentTableIndex
-            });
-            break;
+      vpin.sendMessageToAllWindows({
+        type: "TableIndexUpdate",
+        index: currentTableIndex,
+      });
+      break;
 
-        case "joyselect":
-            tableAudio.stop();
-            vpin.sendMessageToAllWindows({ type: "TableLaunching" });
-            fadeOut();
-            await vpin.launchTable(currentTableIndex);
-            break;
+    case "joyselect":
+      vpin.sendMessageToAllWindows({ type: "TableLaunching" });
+      fadeOut();
+      await vpin.launchTable(currentTableIndex);
+      break;
 
-        case "joyback":
-            // Handle back button if needed
-            break;
-    }
+    case "joyback":
+      // Handle back button if needed
+      break;
+  }
 }
