@@ -4,12 +4,9 @@
  */
 
 async function receiveEvent(message) {
-  vpin.call("console_out", message); // Debug: send to Python CLI console
-
-  // Let VPinFECore handle the data refresh logic
+  vpin.call("console_out", message);
   await vpin.handleEvent(message);
 
-  // Handle UI updates based on event type
   switch (message.type) {
     case "TableIndexUpdate":
       currentTableIndex = message.index;
@@ -20,11 +17,17 @@ async function receiveEvent(message) {
       if (windowName === "table") {
         tableAudio.stop();
       }
+      document.querySelectorAll("video").forEach((v) => v.pause());
       fadeOut();
       break;
 
     case "TableLaunchComplete":
       fadeIn();
+      setTimeout(() => {
+        document
+          .querySelectorAll("video")
+          .forEach((v) => v.play().catch(() => {}));
+      }, 100);
       if (windowName === "table") {
         tableAudio.play(vpin.getAudioURL(currentTableIndex));
       }
@@ -34,6 +37,7 @@ async function receiveEvent(message) {
       if (windowName === "table") {
         tableAudio.stop();
       }
+      document.querySelectorAll("video").forEach((v) => v.pause());
       showRemoteLaunchOverlay(message.table_name);
       fadeOut();
       break;
@@ -41,6 +45,11 @@ async function receiveEvent(message) {
     case "RemoteLaunchComplete":
       hideRemoteLaunchOverlay();
       fadeIn();
+      setTimeout(() => {
+        document
+          .querySelectorAll("video")
+          .forEach((v) => v.play().catch(() => {}));
+      }, 100);
       if (windowName === "table") {
         tableAudio.play(vpin.getAudioURL(currentTableIndex));
       }

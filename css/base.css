@@ -76,10 +76,53 @@ body.dmd-screen #rootContainer {
     transition: opacity 0.8s ease-in-out;
     pointer-events: none;
     z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #fadeOverlay.show {
     opacity: 1;
+}
+
+#loading-message {
+    text-align: center;
+    color: #fff;
+}
+
+.loading-spinner {
+    width: 80px;
+    height: 80px;
+    border: 6px solid rgba(255, 255, 255, 0.1);
+    border-top: 6px solid #ffb95d;
+    border-radius: 50%;
+    margin: 0 auto 30px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-text {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+#loading-table-name {
+    font-size: 2rem;
+    color: #ffb95d;
+    margin-top: 15px;
+    font-weight: 500;
 }
 
 /* Remote launch overlay */
