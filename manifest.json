@@ -5,6 +5,6 @@
   "description": "A 3-screen cabinet theme optimized for portrait playfield with landscape backglass/DMD. Supports both images and videos.",
   "preview_image": "preview.png",
   "supported_screens": 3,
-  "type": "both",
+  "type": "cab",
   "change_log": "v1.0.0: Optimized for 3-screen cabinet with portrait playfield, added video support for BG/DMD screens"
 }
