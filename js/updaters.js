@@ -155,7 +155,12 @@ function updateBGWindow() {
   oldMedia.forEach((media) => cleanupMediaElement(media));
   container.innerHTML = "";
 
-  const mediaElement = createMediaElement(bgVideoUrl, bgImageUrl, title);
+  const mediaElement = createMediaElement(
+    bgVideoUrl,
+    bgImageUrl,
+    title,
+    "contain",
+  );
   if (mediaElement) {
     container.appendChild(mediaElement);
   }
@@ -200,7 +205,12 @@ function updateDMDWindow() {
   oldMedia.forEach((media) => cleanupMediaElement(media));
   container.innerHTML = "";
 
-  const mediaElement = createMediaElement(dmdVideoUrl, dmdImageUrl, title);
+  const mediaElement = createMediaElement(
+    dmdVideoUrl,
+    dmdImageUrl,
+    title,
+    "contain",
+  );
   if (mediaElement) {
     container.appendChild(mediaElement);
   }

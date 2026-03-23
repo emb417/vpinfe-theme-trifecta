@@ -105,7 +105,9 @@ function applyMediaRotation(element) {
   }
 }
 
-function createMediaElement(videoUrl, imageUrl, title) {
+function createMediaElement(videoUrl, imageUrl, title, fitMode = "cover") {
+  const objectFit = fitMode;
+
   if (hasUsableMedia(videoUrl)) {
     const video = document.createElement("video");
     video.src = videoUrl;
@@ -115,14 +117,14 @@ function createMediaElement(videoUrl, imageUrl, title) {
     video.muted = true;
     video.playsInline = true;
     video.preload = "metadata"; // Don't preload full video
-    video.style.cssText = "width: 100%; height: 100%; object-fit: cover;";
+    video.style.cssText = `width: 100%; height: 100%; object-fit: ${objectFit};`;
     video.onerror = () => {
       // Fallback to image on video error
       if (hasUsableMedia(imageUrl)) {
         const img = document.createElement("img");
         img.src = imageUrl;
         img.alt = title;
-        img.style.cssText = "width: 100%; height: 100%; object-fit: cover;";
+        img.style.cssText = `width: 100%; height: 100%; object-fit: ${objectFit};`;
         video.replaceWith(img);
       }
     };
@@ -131,7 +133,7 @@ function createMediaElement(videoUrl, imageUrl, title) {
     const img = document.createElement("img");
     img.src = imageUrl;
     img.alt = title;
-    img.style.cssText = "width: 100%; height: 100%; object-fit: cover;";
+    img.style.cssText = `width: 100%; height: 100%; object-fit: ${objectFit};`;
     return img;
   }
   return null;
