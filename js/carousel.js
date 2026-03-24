@@ -45,7 +45,6 @@ function createWheelTrack() {
 
 function renderWheelCarousel(track, centerIndex) {
   const cards = Array.from(track.children);
-  const fragment = document.createDocumentFragment();
 
   cards.forEach((card) => {
     const offset = Number(card.dataset.offset || 0);
@@ -107,12 +106,9 @@ function renderWheelCarousel(track, centerIndex) {
     }
   });
 
-  requestIdleCallback(
-    () => {
-      preloadNearbyWheelImages();
-    },
-    { timeout: 100 },
-  );
+  setTimeout(() => {
+    preloadNearbyWheelImages();
+  }, 0);
 }
 
 function getWheelStep(track) {

@@ -24,23 +24,11 @@ function updateBGWindow() {
   const bgVideoUrl = vpin.getVideoURL(currentTableIndex, "bg");
 
   if (!hasUsableMedia(bgVideoUrl) && !hasUsableMedia(bgImageUrl)) {
+    container.innerHTML = '<div class="empty-state">No BG Media</div>';
     return;
   }
 
   const existingMedia = container.querySelector("video, img");
-  if (existingMedia) {
-    const currentSrc = existingMedia.src || "";
-    if (hasUsableMedia(bgVideoUrl) && currentSrc === bgVideoUrl) {
-      return;
-    }
-    if (
-      !hasUsableMedia(bgVideoUrl) &&
-      hasUsableMedia(bgImageUrl) &&
-      currentSrc === bgImageUrl
-    ) {
-      return;
-    }
-  }
 
   // More efficient cleanup - don't query twice
   if (existingMedia) {
@@ -56,5 +44,7 @@ function updateBGWindow() {
   );
   if (mediaElement) {
     container.appendChild(mediaElement);
+  } else {
+    container.innerHTML = '<div class="empty-state">No BG Media</div>';
   }
 }

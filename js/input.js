@@ -11,12 +11,12 @@ async function handleInput(input) {
         currentTableIndex - 1,
         vpin.tableData.length,
       );
-      updateScreen();
 
       vpin.sendMessageToAllWindows({
         type: "TableIndexUpdate",
         index: currentTableIndex,
       });
+      updateScreen();
       break;
 
     case "joyright":
@@ -25,12 +25,12 @@ async function handleInput(input) {
         currentTableIndex + 1,
         vpin.tableData.length,
       );
-      updateScreen();
 
       vpin.sendMessageToAllWindows({
         type: "TableIndexUpdate",
         index: currentTableIndex,
       });
+      updateScreen();
       break;
 
     case "joyselect":

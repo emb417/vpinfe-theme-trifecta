@@ -24,20 +24,11 @@ function updateDMDWindow() {
   const dmdVideoUrl = vpin.getVideoURL(currentTableIndex, "dmd");
 
   if (!hasUsableMedia(dmdVideoUrl) && !hasUsableMedia(dmdImageUrl)) {
+    container.innerHTML = '<div class="empty-state">No DMD Media</div>';
     return;
   }
 
   const existingMedia = container.querySelector("video, img");
-  if (existingMedia) {
-    const currentSrc = existingMedia.src || "";
-    if (hasUsableMedia(dmdVideoUrl) && currentSrc === dmdVideoUrl) return;
-    if (
-      !hasUsableMedia(dmdVideoUrl) &&
-      hasUsableMedia(dmdImageUrl) &&
-      currentSrc === dmdImageUrl
-    )
-      return;
-  }
 
   if (existingMedia) {
     cleanupMediaElement(container);
@@ -52,5 +43,7 @@ function updateDMDWindow() {
   );
   if (mediaElement) {
     container.appendChild(mediaElement);
+  } else {
+    container.innerHTML = '<div class="empty-state">No DMD Media</div>';
   }
 }

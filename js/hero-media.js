@@ -87,94 +87,71 @@ function updateHeroMedia(container, title) {
   const imageUrl = vpin.getImageURL(currentTableIndex, "table");
   const videoUrl = vpin.getVideoURL(currentTableIndex, "table");
 
-  const hasValidVideo = hasUsableMedia(videoUrl);
-  const hasValidImage = hasUsableMedia(imageUrl);
-
-  if (!hasValidVideo && !hasValidImage) {
-    return;
-  }
-
-  const previousLayer = container.querySelector(
-    ".hero-media-frame.is-active, .hero-media-frame",
-  );
-
-  if (previousLayer) {
-    const prevImageUrl = previousLayer.dataset.imageUrl;
-    const prevVideoUrl = previousLayer.dataset.videoUrl;
-
-    if (prevImageUrl === imageUrl && prevVideoUrl === videoUrl) {
-      previousLayer.classList.remove("is-entering", "is-exiting");
-      previousLayer.classList.add("is-active");
-      return;
-    }
-  }
-
-  const allOldLayers = container.querySelectorAll(".hero-media-frame");
-  allOldLayers.forEach((layer) => {
-    cleanupMediaElement(layer);
-    layer.remove();
-  });
-
-  const frame = document.createElement("div");
-  frame.className = "hero-media-frame hero-media-layer is-entering";
-  frame.dataset.imageUrl = imageUrl;
-  frame.dataset.videoUrl = videoUrl;
+  const newFrame = document.createElement("div");
+  newFrame.className = "hero-media-frame hero-media-layer is-entering";
+  newFrame.dataset.imageUrl = imageUrl;
+  newFrame.dataset.videoUrl = videoUrl;
 
   let activated = false;
   const activateLayer = () => {
     if (activated) return;
     activated = true;
+
     requestAnimationFrame(() => {
-      frame.classList.remove("is-entering");
-      frame.classList.add("is-active");
+      newFrame.classList.remove("is-entering");
+      newFrame.classList.add("is-active");
+
+      const oldLayers = container.querySelectorAll(
+        ".hero-media-frame:not(.is-entering)",
+      );
+      oldLayers.forEach((layer) => {
+        if (layer !== newFrame) {
+          layer.remove();
+        }
+      });
     });
   };
 
   if (hasUsableMedia(videoUrl)) {
     const video = document.createElement("video");
     video.src = videoUrl;
-    if (hasUsableMedia(imageUrl)) {
-      video.poster = imageUrl;
-    }
+    if (hasUsableMedia(imageUrl)) video.poster = imageUrl;
+
     video.autoplay = true;
     video.loop = true;
     video.muted = true;
     video.playsInline = true;
-    video.preload = "metadata";
     video.className = "hero-media-asset";
-    video.load();
-    video.play().catch(() => {});
 
+    if (heroVideoCache.has(videoUrl)) {
+      const cachedVideo = heroVideoCache.get(videoUrl);
+      video.src = cachedVideo.src;
+    }
+
+    video.onloadeddata = activateLayer;
     video.onerror = () => {
       const fallback = buildHeroImage(imageUrl, title);
-      video.replaceWith(fallback);
+      newFrame.replaceChildren(fallback);
       applyMediaRotation(fallback);
       activateLayer();
     };
-    video.addEventListener("loadeddata", activateLayer, { once: true });
-    frame.appendChild(video);
+
+    newFrame.appendChild(video);
     applyMediaRotation(video);
-  } else {
+  } else if (hasUsableMedia(imageUrl)) {
     const image = buildHeroImage(imageUrl, title);
-    if (image.complete) {
-      activateLayer();
-    } else {
-      image.addEventListener("load", activateLayer, { once: true });
-      image.addEventListener("error", activateLayer, { once: true });
-    }
-    frame.appendChild(image);
+    image.onload = activateLayer;
+    image.onerror = activateLayer;
+    newFrame.appendChild(image);
     applyMediaRotation(image);
   }
 
-  container.appendChild(frame);
-  lastHeroImageUrl = imageUrl;
+  container.appendChild(newFrame);
 
-  activateLayer();
+  setTimeout(activateLayer, 2000);
 
-  if (heroUpdateDebounceTimer) {
-    clearTimeout(heroUpdateDebounceTimer);
-  }
-  heroUpdateDebounceTimer = setTimeout(() => {
+  clearTimeout(window.heroUpdateDebounceTimer);
+  window.heroUpdateDebounceTimer = setTimeout(() => {
     preloadAdjacentHeroMedia();
   }, 500);
 }
