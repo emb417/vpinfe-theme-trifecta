@@ -3,6 +3,28 @@
  * Main update logic for the table (playfield) window
  */
 
+function truncateAuthors(authors) {
+  if (!authors) return "";
+
+  let authorArray = authors;
+  if (typeof authors === "string") {
+    authorArray = authors
+      .split(",")
+      .map((a) => a.trim())
+      .filter((a) => a);
+  }
+
+  if (!Array.isArray(authorArray) || authorArray.length === 0) return "";
+
+  const displayAuthors = authorArray.slice(0, 3);
+
+  if (authorArray.length > 3) {
+    return displayAuthors.join(", ") + " +" + (authorArray.length - 3);
+  }
+
+  return displayAuthors.join(", ");
+}
+
 function updateTableWindow() {
   const container = document.getElementById("rootContainer");
   tableView = ensureTableView(container);
@@ -50,26 +72,4 @@ function updateTableWindow() {
 
   lastRenderedTableIndex = currentTableIndex;
   lastWheelMoveDirection = 0;
-}
-
-function truncateAuthors(authors) {
-  if (!authors) return "";
-
-  let authorArray = authors;
-  if (typeof authors === "string") {
-    authorArray = authors
-      .split(",")
-      .map((a) => a.trim())
-      .filter((a) => a);
-  }
-
-  if (!Array.isArray(authorArray) || authorArray.length === 0) return "";
-
-  const displayAuthors = authorArray.slice(0, 3);
-
-  if (authorArray.length > 3) {
-    return displayAuthors.join(", ") + " +" + (authorArray.length - 3);
-  }
-
-  return displayAuthors.join(", ");
 }
