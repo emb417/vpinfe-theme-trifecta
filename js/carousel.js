@@ -1,6 +1,6 @@
 /**
  * Carousel
- * Wheel carousel rendering and animation with performance optimizations
+ * Wheel carousel rendering and animation
  */
 
 function createWheelTrack() {
@@ -145,17 +145,20 @@ function updateWheelCarousel(view) {
     fill: "forwards",
   };
 
+  track.style.opacity = "1";
+  incomingTrack.style.opacity = "1";
+
   track.animate(
     [
-      { transform: "translateY(-50%)" },
-      { transform: translateValue(outgoingDelta) },
+      { transform: "translateY(-50%)", opacity: 1 },
+      { transform: translateValue(outgoingDelta), opacity: 0 },
     ],
     animationOptions,
   );
   incomingTrack.animate(
     [
-      { transform: translateValue(incomingStart) },
-      { transform: "translateY(-50%)" },
+      { transform: translateValue(incomingStart), opacity: 1 },
+      { transform: "translateY(-50%)", opacity: 1 },
     ],
     animationOptions,
   );
