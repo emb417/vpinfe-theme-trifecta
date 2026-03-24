@@ -3,6 +3,12 @@
  * Handles VPinFE system events
  */
 
+// Track mouse movement during table play
+let mouseMovedDuringPlay = false;
+const handleMouseMoveDuringPlay = () => {
+  mouseMovedDuringPlay = true;
+};
+
 async function receiveEvent(message) {
   vpin.call("console_out", message);
 
@@ -17,6 +23,9 @@ async function receiveEvent(message) {
     case "TableLaunching":
       document.querySelectorAll("video").forEach((v) => v.pause());
       fadeOut();
+      document.body.style.cursor = "none";
+      mouseMovedDuringPlay = false;
+      document.addEventListener("mousemove", handleMouseMoveDuringPlay);
       break;
 
     case "TableLaunchComplete":
@@ -26,12 +35,19 @@ async function receiveEvent(message) {
           .querySelectorAll("video")
           .forEach((v) => v.play().catch(() => {}));
       }, 100);
+      document.removeEventListener("mousemove", handleMouseMoveDuringPlay);
+      if (mouseMovedDuringPlay) {
+        document.body.style.cursor = "auto";
+      }
       break;
 
     case "RemoteLaunching":
       document.querySelectorAll("video").forEach((v) => v.pause());
       showRemoteLaunchOverlay(message.table_name);
       fadeOut();
+      document.body.style.cursor = "none";
+      mouseMovedDuringPlay = false;
+      document.addEventListener("mousemove", handleMouseMoveDuringPlay);
       break;
 
     case "RemoteLaunchComplete":
@@ -42,6 +58,10 @@ async function receiveEvent(message) {
           .querySelectorAll("video")
           .forEach((v) => v.play().catch(() => {}));
       }, 100);
+      document.removeEventListener("mousemove", handleMouseMoveDuringPlay);
+      if (mouseMovedDuringPlay) {
+        document.body.style.cursor = "auto";
+      }
       break;
 
     case "TableDataChange":
