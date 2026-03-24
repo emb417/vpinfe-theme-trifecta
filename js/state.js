@@ -18,17 +18,15 @@ let tableRotationDegrees = 0;
 // Configuration
 let config = null;
 
-// Media caching - Images
-let lastHeroImageUrl = null;
+// Media caching (BG/DMD)
 const mediaPreloadCache = new Map();
-
-// Media caching - Videos (BG/DMD)
 const videoPreloadCache = new Map();
 
-// Media caching - Videos (Hero)
+// Media caching (Hero)
+let lastHeroImageUrl = null;
 const heroVideoCache = new Map();
 
-// Media caching - Wheel images
+// Media caching (Wheel)
 const wheelImageCache = new Map();
 
 // Cache size limits
