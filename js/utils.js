@@ -39,11 +39,13 @@ function cleanupAllMedia() {
 function updateScreen() {
   if (windowName === "table") {
     updateTableWindow();
-    preloadNearbyMedia();
+    preloadAdjacentHeroMedia();
   } else if (windowName === "bg") {
     updateBGWindow();
+    preloadNearbyMedia();
   } else if (windowName === "dmd") {
     updateDMDWindow();
+    preloadNearbyMedia();
   }
 }
 
