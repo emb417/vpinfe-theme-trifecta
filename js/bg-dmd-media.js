@@ -1,61 +1,7 @@
 /**
  * BG and DMD Media Management
- * Handles image/video preloading and rendering with memory management
+ * Handles backglass and dmd image/video loading and cleanup
  */
-
-function preloadImage(url) {
-  if (!hasUsableMedia(url)) return;
-  if (mediaPreloadCache.has(url)) return;
-
-  const img = new Image();
-  img.decoding = "async";
-  img.src = url;
-  const promise = img.decode ? img.decode().catch(() => {}) : Promise.resolve();
-  mediaPreloadCache.set(url, promise);
-
-  if (mediaPreloadCache.size > 12) {
-    const firstKey = mediaPreloadCache.keys().next().value;
-    mediaPreloadCache.delete(firstKey);
-  }
-}
-
-function preloadVideo(url) {
-  if (!hasUsableMedia(url)) return;
-  if (videoPreloadCache.has(url)) return;
-
-  const video = document.createElement("video");
-  video.src = url;
-  video.preload = "auto";
-  video.muted = true;
-  video.load();
-
-  videoPreloadCache.set(url, video);
-
-  // Cache for adjacent ±1 table
-  if (videoPreloadCache.size > 6) {
-    const firstKey = videoPreloadCache.keys().next().value;
-    const oldVideo = videoPreloadCache.get(firstKey);
-    oldVideo.src = "";
-    oldVideo.load();
-    videoPreloadCache.delete(firstKey);
-  }
-}
-
-function preloadNearbyMedia() {
-  if (!vpin.tableData || vpin.getTableCount() === 0) return;
-
-  const indices = [
-    wrapIndex(currentTableIndex - 1, vpin.getTableCount()),
-    wrapIndex(currentTableIndex + 1, vpin.getTableCount()),
-  ];
-
-  indices.forEach((index) => {
-    preloadImage(vpin.getImageURL(index, "bg"));
-    preloadImage(vpin.getImageURL(index, "dmd"));
-    preloadVideo(vpin.getVideoURL(index, "bg"));
-    preloadVideo(vpin.getVideoURL(index, "dmd"));
-  });
-}
 
 function cleanupMediaElement(element) {
   if (!element) return;
@@ -81,15 +27,6 @@ function cleanupMediaElement(element) {
   images.forEach((img) => {
     img.src = "";
   });
-}
-
-function cleanupBGDMDCache() {
-  videoPreloadCache.forEach((video) => {
-    video.src = "";
-    video.load();
-  });
-  videoPreloadCache.clear();
-  mediaPreloadCache.clear();
 }
 
 function createMediaElement(videoUrl, imageUrl, title, fitMode = "cover") {

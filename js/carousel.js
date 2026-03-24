@@ -3,34 +3,6 @@
  * Wheel carousel rendering and animation with performance optimizations
  */
 
-function preloadWheelImage(url) {
-  if (!hasUsableMedia(url)) return;
-  if (wheelImageCache.has(url)) return;
-
-  const img = new Image();
-  img.src = url;
-  wheelImageCache.set(url, img);
-
-  if (wheelImageCache.size > 10) {
-    const firstKey = wheelImageCache.keys().next().value;
-    wheelImageCache.delete(firstKey);
-  }
-}
-
-function preloadNearbyWheelImages() {
-  if (!vpin.tableData || vpin.getTableCount() === 0) return;
-
-  for (let offset = -5; offset <= 5; offset++) {
-    const index = wrapIndex(currentTableIndex + offset, vpin.getTableCount());
-    const wheelUrl = vpin.getImageURL(index, "wheel");
-    preloadWheelImage(wheelUrl);
-  }
-}
-
-function cleanupWheelCache() {
-  wheelImageCache.clear();
-}
-
 function createWheelTrack() {
   const wheelTrack = document.createElement("div");
   wheelTrack.className = "wheel-track";
@@ -105,10 +77,6 @@ function renderWheelCarousel(track, centerIndex) {
       }
     }
   });
-
-  setTimeout(() => {
-    preloadNearbyWheelImages();
-  }, 0);
 }
 
 function getWheelStep(track) {

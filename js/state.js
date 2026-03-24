@@ -18,25 +18,10 @@ let tableRotationDegrees = 0;
 // Configuration
 let config = null;
 
-// Media caching (BG/DMD)
-const mediaPreloadCache = new Map();
-const videoPreloadCache = new Map();
-
-// Media caching (Hero)
-let lastHeroImageUrl = null;
-const heroVideoCache = new Map();
-
-// Media caching (Wheel)
-const wheelImageCache = new Map();
-
-// Cache size limits
-const MAX_HERO_CACHE = 3;
-const MAX_VIDEO_CACHE = 6;
-const MAX_IMAGE_CACHE = 12;
-const MAX_WHEEL_CACHE = 10;
-
 // Debounce timers
 let heroUpdateDebounceTimer = null;
+let bgUpdateDebounceTimer = null;
+let dmdUpdateDebounceTimer = null;
 
 // View references
 let tableView = null;

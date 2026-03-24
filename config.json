@@ -23,8 +23,7 @@
   "media": {
     "preferVideo": true,
     "videoAutoplay": true,
-    "fallbackToImage": true,
-    "preloadImages": true
+    "fallbackToImage": true
   },
 
   "screens": {

@@ -24,28 +24,38 @@ function cleanupAllMedia() {
     v.src = "";
     v.load();
   });
-
-  if (typeof cleanupWheelCache === "function") {
-    cleanupWheelCache();
-  }
-  if (typeof cleanupBGDMDCache === "function") {
-    cleanupBGDMDCache();
-  }
-  if (typeof cleanupHeroCache === "function") {
-    cleanupHeroCache();
-  }
 }
 
 function updateScreen() {
   if (windowName === "table") {
-    updateTableWindow();
-    preloadAdjacentHeroMedia();
+    updateTableWindowCarousel();
+
+    if (heroUpdateDebounceTimer !== null) {
+      clearTimeout(heroUpdateDebounceTimer);
+    }
+
+    heroUpdateDebounceTimer = setTimeout(() => {
+      updateTableWindowHeroMedia();
+      heroUpdateDebounceTimer = null;
+    }, 200);
   } else if (windowName === "bg") {
-    updateBGWindow();
-    preloadNearbyMedia();
+    if (bgUpdateDebounceTimer !== null) {
+      clearTimeout(bgUpdateDebounceTimer);
+    }
+
+    bgUpdateDebounceTimer = setTimeout(() => {
+      updateBGWindow();
+      bgUpdateDebounceTimer = null;
+    }, 50);
   } else if (windowName === "dmd") {
-    updateDMDWindow();
-    preloadNearbyMedia();
+    if (dmdUpdateDebounceTimer !== null) {
+      clearTimeout(dmdUpdateDebounceTimer);
+    }
+
+    dmdUpdateDebounceTimer = setTimeout(() => {
+      updateDMDWindow();
+      dmdUpdateDebounceTimer = null;
+    }, 100);
   }
 }
 

@@ -24,7 +24,8 @@ vpin.ready.then(async () => {
     await applyTableLayout();
     window.addEventListener("resize", () => {
       applyTableLayout().then(() => {
-        updateTableWindow();
+        updateTableWindowCarousel();
+        updateTableWindowHeroMedia();
       });
     });
     window.addEventListener("keydown", (e) => {

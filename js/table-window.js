@@ -25,7 +25,11 @@ function truncateAuthors(authors) {
   return displayAuthors.join(", ");
 }
 
-function updateTableWindow() {
+/**
+ * Update carousel and metadata immediately (no debounce)
+ * Called directly for instant visual feedback
+ */
+function updateTableWindowCarousel() {
   const container = document.getElementById("rootContainer");
   tableView = ensureTableView(container);
 
@@ -68,8 +72,22 @@ function updateTableWindow() {
       year && versionDisplay ? "" : "none";
   }
 
-  updateHeroMedia(tableView.heroMedia, title);
-
   lastRenderedTableIndex = currentTableIndex;
   lastWheelMoveDirection = 0;
+}
+
+/**
+ * Update hero media only (debounced)
+ */
+function updateTableWindowHeroMedia() {
+  if (!tableView) return;
+  if (!vpin.tableData || vpin.tableData.length === 0) return;
+
+  const table = vpin.getTableMeta(currentTableIndex);
+  const info = table.meta.Info || {};
+  const vpx = table.meta.VPXFile || {};
+  const title =
+    info.Title || vpx.filename || table.tableDirName || "Unknown Table";
+
+  updateHeroMedia(tableView.heroMedia, title);
 }

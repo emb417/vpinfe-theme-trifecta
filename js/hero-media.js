@@ -1,6 +1,6 @@
 /**
  * Hero Media Management
- * Handles hero window video/image rendering with caching for large files
+ * Handles table window video/image loading and rotation rendering
  */
 
 function buildHeroImage(imageUrl, title) {
@@ -38,49 +38,6 @@ function applyMediaRotation(element) {
     element.style.transform =
       mediaRotation !== 0 ? `rotate(${mediaRotation}deg)` : "none";
   }
-}
-
-function preloadHeroVideo(url) {
-  if (!hasUsableMedia(url)) return;
-  if (heroVideoCache.has(url)) return;
-
-  const video = document.createElement("video");
-  video.src = url;
-  video.preload = "auto";
-  video.muted = true;
-  video.load();
-
-  heroVideoCache.set(url, video);
-
-  if (heroVideoCache.size > MAX_HERO_CACHE) {
-    const firstKey = heroVideoCache.keys().next().value;
-    const oldVideo = heroVideoCache.get(firstKey);
-    oldVideo.src = "";
-    oldVideo.load();
-    heroVideoCache.delete(firstKey);
-  }
-}
-
-function preloadAdjacentHeroMedia() {
-  if (!vpin.tableData || vpin.getTableCount() === 0) return;
-
-  const indices = [
-    wrapIndex(currentTableIndex - 1, vpin.getTableCount()),
-    wrapIndex(currentTableIndex + 1, vpin.getTableCount()),
-  ];
-
-  indices.forEach((index) => {
-    const videoUrl = vpin.getVideoURL(index, "table");
-    preloadHeroVideo(videoUrl);
-  });
-}
-
-function cleanupHeroCache() {
-  heroVideoCache.forEach((video) => {
-    video.src = "";
-    video.load();
-  });
-  heroVideoCache.clear();
 }
 
 function updateHeroMedia(container, title) {
@@ -123,11 +80,6 @@ function updateHeroMedia(container, title) {
     video.playsInline = true;
     video.className = "hero-media-asset";
 
-    if (heroVideoCache.has(videoUrl)) {
-      const cachedVideo = heroVideoCache.get(videoUrl);
-      video.src = cachedVideo.src;
-    }
-
     video.onloadeddata = activateLayer;
     video.onerror = () => {
       const fallback = buildHeroImage(imageUrl, title);
@@ -147,11 +99,4 @@ function updateHeroMedia(container, title) {
   }
 
   container.appendChild(newFrame);
-
-  setTimeout(activateLayer, 2000);
-
-  clearTimeout(window.heroUpdateDebounceTimer);
-  window.heroUpdateDebounceTimer = setTimeout(() => {
-    preloadAdjacentHeroMedia();
-  }, 500);
 }
