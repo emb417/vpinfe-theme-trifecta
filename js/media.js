@@ -31,7 +31,6 @@ function preloadNearbyMedia() {
 
   indices.forEach((index) => {
     preloadImage(vpin.getImageURL(index, "wheel"));
-    preloadImage(vpin.getImageURL(index, "cab"));
   });
 }
 
