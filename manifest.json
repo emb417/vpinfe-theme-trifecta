@@ -6,5 +6,5 @@
   "preview_image": "preview.png",
   "supported_screens": 3,
   "type": "cab",
-  "change_log": "Instanteous carousel navigation: debouncing the switch of main table, bg, and dmd media at various rates to allow for faster navigation."
+  "change_log": "More transparent look with new instantaneous carousel navigation: debouncing the switch of main table, bg, and dmd media at various rates to allow for faster navigation."
 }
