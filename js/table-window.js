@@ -3,17 +3,6 @@
  * Main update logic for the table (playfield) window
  */
 
-function updateScreen() {
-  if (windowName === "table") {
-    updateTableWindow();
-    preloadNearbyMedia();
-  } else if (windowName === "bg") {
-    updateBGWindow();
-  } else if (windowName === "dmd") {
-    updateDMDWindow();
-  }
-}
-
 function updateTableWindow() {
   const container = document.getElementById("rootContainer");
   tableView = ensureTableView(container);

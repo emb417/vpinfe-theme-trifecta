@@ -18,6 +18,35 @@ function hasUsableMedia(url) {
   return Boolean(url) && !String(url).includes("file_missing");
 }
 
+function cleanupAllMedia() {
+  document.querySelectorAll("video").forEach((v) => {
+    v.pause();
+    v.src = "";
+    v.load();
+  });
+
+  if (typeof cleanupWheelCache === "function") {
+    cleanupWheelCache();
+  }
+  if (typeof cleanupBGDMDCache === "function") {
+    cleanupBGDMDCache();
+  }
+  if (typeof cleanupHeroCache === "function") {
+    cleanupHeroCache();
+  }
+}
+
+function updateScreen() {
+  if (windowName === "table") {
+    updateTableWindow();
+    preloadNearbyMedia();
+  } else if (windowName === "bg") {
+    updateBGWindow();
+  } else if (windowName === "dmd") {
+    updateDMDWindow();
+  }
+}
+
 function fadeOut() {
   const overlay = document.getElementById("fadeOverlay");
   if (overlay) {

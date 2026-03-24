@@ -1,9 +1,7 @@
 /**
- * Media Management
+ * BG and DMD Media Management
  * Handles image/video preloading and rendering with memory management
  */
-
-let mediaUpdateDebounceTimer = null;
 
 function preloadImage(url) {
   if (!hasUsableMedia(url)) return;
@@ -15,9 +13,31 @@ function preloadImage(url) {
   const promise = img.decode ? img.decode().catch(() => {}) : Promise.resolve();
   mediaPreloadCache.set(url, promise);
 
-  if (mediaPreloadCache.size > 6) {
+  if (mediaPreloadCache.size > 12) {
     const firstKey = mediaPreloadCache.keys().next().value;
     mediaPreloadCache.delete(firstKey);
+  }
+}
+
+function preloadVideo(url) {
+  if (!hasUsableMedia(url)) return;
+  if (videoPreloadCache.has(url)) return;
+
+  const video = document.createElement("video");
+  video.src = url;
+  video.preload = "auto";
+  video.muted = true;
+  video.load();
+
+  videoPreloadCache.set(url, video);
+
+  // Cache for adjacent ±1 table
+  if (videoPreloadCache.size > 6) {
+    const firstKey = videoPreloadCache.keys().next().value;
+    const oldVideo = videoPreloadCache.get(firstKey);
+    oldVideo.src = "";
+    oldVideo.load();
+    videoPreloadCache.delete(firstKey);
   }
 }
 
@@ -30,7 +50,10 @@ function preloadNearbyMedia() {
   ];
 
   indices.forEach((index) => {
-    preloadImage(vpin.getImageURL(index, "wheel"));
+    preloadImage(vpin.getImageURL(index, "bg"));
+    preloadImage(vpin.getImageURL(index, "dmd"));
+    preloadVideo(vpin.getVideoURL(index, "bg"));
+    preloadVideo(vpin.getVideoURL(index, "dmd"));
   });
 }
 
@@ -39,62 +62,34 @@ function cleanupMediaElement(element) {
 
   if (element.tagName === "VIDEO") {
     element.pause();
-    element.removeAttribute("src");
+    element.src = "";
     element.load();
   }
 
   if (element.tagName === "IMG") {
-    element.removeAttribute("src");
+    element.src = "";
   }
 
   const videos = element.querySelectorAll("video");
   videos.forEach((video) => {
     video.pause();
-    video.removeAttribute("src");
+    video.src = "";
     video.load();
   });
 
   const images = element.querySelectorAll("img");
   images.forEach((img) => {
-    img.removeAttribute("src");
+    img.src = "";
   });
 }
 
-function buildHeroImage(imageUrl, title) {
-  const img = document.createElement("img");
-  img.src = imageUrl;
-  img.alt = title;
-  img.className = "hero-media-asset";
-  img.onerror = () => {
-    img.removeAttribute("src");
-    img.alt = `${title} media unavailable`;
-  };
-  return img;
-}
-
-function applyMediaRotation(element) {
-  if (!element) return;
-
-  const normalized = ((tableRotationDegrees % 360) + 360) % 360;
-  const swapAxes = normalized === 90 || normalized === 270;
-  const mediaRotation = swapAxes ? -tableRotationDegrees : tableRotationDegrees;
-
-  if (swapAxes) {
-    element.style.width = "177.78%";
-    element.style.height = "56.25%";
-    element.style.maxWidth = "none";
-    element.style.maxHeight = "none";
-    element.style.objectFit = "fill";
-    element.style.transform = `rotate(${mediaRotation}deg)`;
-  } else {
-    element.style.width = "100%";
-    element.style.height = "100%";
-    element.style.maxWidth = "";
-    element.style.maxHeight = "";
-    element.style.objectFit = "cover";
-    element.style.transform =
-      mediaRotation !== 0 ? `rotate(${mediaRotation}deg)` : "none";
-  }
+function cleanupBGDMDCache() {
+  videoPreloadCache.forEach((video) => {
+    video.src = "";
+    video.load();
+  });
+  videoPreloadCache.clear();
+  mediaPreloadCache.clear();
 }
 
 function createMediaElement(videoUrl, imageUrl, title, fitMode = "cover") {
@@ -110,8 +105,11 @@ function createMediaElement(videoUrl, imageUrl, title, fitMode = "cover") {
     video.loop = true;
     video.muted = true;
     video.playsInline = true;
-    video.preload = "metadata";
+    video.preload = "auto";
     video.style.cssText = `width: 100%; height: 100%; object-fit: ${objectFit};`;
+
+    video.play().catch(() => {});
+
     video.onerror = () => {
       if (hasUsableMedia(imageUrl)) {
         const img = document.createElement("img");

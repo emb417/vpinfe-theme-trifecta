@@ -1,0 +1,60 @@
+/**
+ * BG Window
+ * Main update logic for the backglass window
+ */
+
+function updateBGWindow() {
+  const container = document.getElementById("rootContainer");
+  if (!vpin.tableData || vpin.tableData.length === 0) {
+    container.innerHTML = "";
+    return;
+  }
+
+  if (currentTableIndex < 0 || currentTableIndex >= vpin.tableData.length) {
+    currentTableIndex = 0;
+  }
+
+  const table = vpin.getTableMeta(currentTableIndex);
+  const info = table.meta.Info || {};
+  const vpx = table.meta.VPXFile || {};
+  const title =
+    info.Title || vpx.filename || table.tableDirName || "Unknown Table";
+
+  const bgImageUrl = vpin.getImageURL(currentTableIndex, "bg");
+  const bgVideoUrl = vpin.getVideoURL(currentTableIndex, "bg");
+
+  if (!hasUsableMedia(bgVideoUrl) && !hasUsableMedia(bgImageUrl)) {
+    return;
+  }
+
+  const existingMedia = container.querySelector("video, img");
+  if (existingMedia) {
+    const currentSrc = existingMedia.src || "";
+    if (hasUsableMedia(bgVideoUrl) && currentSrc === bgVideoUrl) {
+      return;
+    }
+    if (
+      !hasUsableMedia(bgVideoUrl) &&
+      hasUsableMedia(bgImageUrl) &&
+      currentSrc === bgImageUrl
+    ) {
+      return;
+    }
+  }
+
+  // More efficient cleanup - don't query twice
+  if (existingMedia) {
+    cleanupMediaElement(container); // ← Cleanup entire container
+  }
+  container.innerHTML = "";
+
+  const mediaElement = createMediaElement(
+    bgVideoUrl,
+    bgImageUrl,
+    title,
+    "contain",
+  );
+  if (mediaElement) {
+    container.appendChild(mediaElement);
+  }
+}

@@ -10,6 +10,7 @@
     height: 100%;
     overflow: hidden;
     background: #000;
+    z-index: 1;
 }
 
 .hero-media-bg {

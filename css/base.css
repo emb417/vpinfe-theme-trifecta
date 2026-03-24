@@ -13,7 +13,7 @@ body {
         radial-gradient(circle at 82% 14%, rgba(255, 196, 78, 0.2), transparent 22%),
         radial-gradient(circle at 72% 76%, rgba(19, 168, 184, 0.14), transparent 28%),
         linear-gradient(180deg, #1a1210 0%, #0a0d12 52%, #020304 100%);
-    color: #fff8ee;
+    color: #000;
     overflow: hidden;
     font-family: "Trebuchet MS", "Segoe UI", sans-serif;
 }

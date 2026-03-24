@@ -1,10 +1,10 @@
 {
   "name": "Trifecta",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "emb417",
-  "description": "A 3-screen cabinet theme optimized for portrait playfield with landscape backglass/DMD. Supports both images and videos.",
+  "description": "A 3-screen cabinet theme optimized for portrait playfield with landscape backglass/DMD. Supports both images and videos in all 3 screens. Carousel style navigation. No Audio Support.",
   "preview_image": "preview.png",
   "supported_screens": 3,
   "type": "cab",
-  "change_log": "v1.0.0: Optimized for 3-screen cabinet with portrait playfield, added video support for BG/DMD screens"
+  "change_log": "v1.1.0: Improved media loading for faster navigation\nv1.0.0: Optimized for 3-screen cabinet with portrait playfield, video supported for all screens"
 }
