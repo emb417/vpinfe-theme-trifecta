@@ -29,6 +29,7 @@ vpin.ready.then(async () => {
       });
     });
     window.addEventListener("keydown", (e) => {
+      if (isGameRunning) return;
       const action =
         keymap[e.code] || keymap[e.key] || keymap[e.key.toLowerCase()];
 
@@ -54,6 +55,7 @@ vpin.ready.then(async () => {
 
     if (windowName === "table") {
       updateScreen();
+      startAutoAdvanceTimer();
 
       setTimeout(() => {
         vpin.sendMessageToAllWindows({

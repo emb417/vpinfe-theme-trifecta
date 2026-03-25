@@ -3,11 +3,6 @@
  * Handles VPinFE system events
  */
 
-let mouseMovedDuringPlay = false;
-const handleMouseMoveDuringPlay = () => {
-  mouseMovedDuringPlay = true;
-};
-
 async function receiveEvent(message) {
   vpin.call("console_out", message);
 
@@ -20,40 +15,38 @@ async function receiveEvent(message) {
       break;
 
     case "TableLaunching":
-      document.querySelectorAll("video").forEach((v) => v.pause());
       fadeOut();
-      cleanupAllMedia();
-      document.body.style.cursor = "none";
-      mouseMovedDuringPlay = false;
-      document.addEventListener("mousemove", handleMouseMoveDuringPlay);
+      if (windowName !== "table") {
+        cleanupAllMedia();
+      }
       break;
 
     case "TableLaunchComplete":
       fadeIn();
-      updateScreen();
-      document.removeEventListener("mousemove", handleMouseMoveDuringPlay);
-      if (mouseMovedDuringPlay) {
-        document.body.style.cursor = "auto";
+      if (windowName !== "table") {
+        updateScreen();
       }
       break;
 
     case "RemoteLaunching":
-      document.querySelectorAll("video").forEach((v) => v.pause());
-      showRemoteLaunchOverlay(message.table_name);
+      if (typeof stopAutoAdvanceTimer === "function") {
+        stopAutoAdvanceTimer();
+      }
+      if (windowName === "table") {
+        showRemoteLaunchOverlay(message.table_name);
+      }
       fadeOut();
-      cleanupAllMedia();
-      document.body.style.cursor = "none";
-      mouseMovedDuringPlay = false;
-      document.addEventListener("mousemove", handleMouseMoveDuringPlay);
+      updateScreen();
       break;
 
     case "RemoteLaunchComplete":
-      hideRemoteLaunchOverlay();
+      if (windowName === "table") {
+        hideRemoteLaunchOverlay();
+      }
       fadeIn();
       updateScreen();
-      document.removeEventListener("mousemove", handleMouseMoveDuringPlay);
-      if (mouseMovedDuringPlay) {
-        document.body.style.cursor = "auto";
+      if (typeof startAutoAdvanceTimer === "function") {
+        startAutoAdvanceTimer();
       }
       break;
 
