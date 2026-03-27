@@ -41,6 +41,7 @@ function updateBGWindow() {
     bgImageUrl,
     title,
     "contain",
+    windowOverride,
   );
   if (mediaElement) {
     container.appendChild(mediaElement);

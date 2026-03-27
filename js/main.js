@@ -10,6 +10,14 @@ window.vpin = vpin;
 window.receiveEvent = receiveEvent;
 
 vpin.ready.then(async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const overrideStr = urlParams.get("override");
+  if (overrideStr) {
+    const parts = overrideStr.split(",").map((v) => parseInt(v.trim()));
+    const [x, y, width, height] = parts;
+    windowOverride = { x, y, width, height };
+  }
+
   await vpin.call("get_my_window_name").then((result) => {
     windowName = result;
   });

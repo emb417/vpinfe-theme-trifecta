@@ -40,6 +40,7 @@ function updateDMDWindow() {
     dmdImageUrl,
     title,
     "contain",
+    windowOverride,
   );
   if (mediaElement) {
     container.appendChild(mediaElement);

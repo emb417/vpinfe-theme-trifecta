@@ -29,8 +29,21 @@ function cleanupMediaElement(element) {
   });
 }
 
-function createMediaElement(videoUrl, imageUrl, title, fitMode = "cover") {
-  const objectFit = fitMode;
+function createMediaElement(
+  videoUrl,
+  imageUrl,
+  title,
+  fitMode = "cover",
+  override = null,
+) {
+  const objectFit = override ? "contain" : fitMode;
+
+  let baseStyle;
+  if (override) {
+    baseStyle = `position: absolute; left: ${override.x}px; top: ${override.y}px; width: ${override.width}px; height: ${override.height}px; object-fit: contain;`;
+  } else {
+    baseStyle = `width: 100%; height: 100%; object-fit: ${objectFit};`;
+  }
 
   if (hasUsableMedia(videoUrl)) {
     const video = document.createElement("video");
@@ -43,7 +56,7 @@ function createMediaElement(videoUrl, imageUrl, title, fitMode = "cover") {
     video.muted = true;
     video.playsInline = true;
     video.preload = "auto";
-    video.style.cssText = `width: 100%; height: 100%; object-fit: ${objectFit};`;
+    video.style.cssText = baseStyle;
 
     video.play().catch(() => {});
 
@@ -52,7 +65,7 @@ function createMediaElement(videoUrl, imageUrl, title, fitMode = "cover") {
         const img = document.createElement("img");
         img.src = imageUrl;
         img.alt = title;
-        img.style.cssText = `width: 100%; height: 100%; object-fit: ${objectFit};`;
+        img.style.cssText = baseStyle;
         video.replaceWith(img);
       }
     };
@@ -61,7 +74,7 @@ function createMediaElement(videoUrl, imageUrl, title, fitMode = "cover") {
     const img = document.createElement("img");
     img.src = imageUrl;
     img.alt = title;
-    img.style.cssText = `width: 100%; height: 100%; object-fit: ${objectFit};`;
+    img.style.cssText = baseStyle;
     return img;
   }
   return null;
