@@ -36,6 +36,7 @@ function updateScreen() {
 
     heroUpdateDebounceTimer = setTimeout(() => {
       updateTableWindowHeroMedia();
+      vpin.playTableAudio(currentTableIndex);
       heroUpdateDebounceTimer = null;
     }, 200);
   } else if (windowName === "bg") {

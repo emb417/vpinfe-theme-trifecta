@@ -1,10 +1,10 @@
 {
   "name": "Trifecta",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "author": "emb417",
-  "description": "3-screen cab carousel theme optimized for videos on all screens. Plus Attract Mode! No Audio Support, yet.",
+  "description": "3-screen cab carousel theme optimized for videos on all screens. Plus Attract Mode with Audio!",
   "preview_image": "preview.png",
   "supported_screens": 3,
   "type": "cab",
-  "change_log": "Media placement and size overrides supported in Displays: bgwindowoverride and dmdwindowoverride."
+  "change_log": "Attract Mode with Audio!"
 }
