@@ -102,6 +102,12 @@ function showRemoteLaunchOverlay(tableName) {
   const nameEl = document.getElementById("remote-launch-table-name");
   if (overlay && nameEl) {
     nameEl.textContent = tableName || "Unknown Table";
+
+    const content = overlay.firstElementChild;
+    if (content && typeof tableRotationDegrees !== "undefined" && tableRotationDegrees !== 0) {
+      content.style.transform = `rotate(${tableRotationDegrees}deg)`;
+    }
+
     overlay.style.display = "flex";
   }
 }
