@@ -48,11 +48,6 @@ function ensureTableView(container) {
             <span class="manufacturer"></span>
             <span class="info-separator manufacturer-separator">•</span>
             <span class="year"></span>
-            <span class="info-separator version-separator">•</span>
-            <span class="version"></span>
-        </div>
-        <div class="info-line info-line-authors">
-            <span class="table-authors"></span>
         </div>
     `;
 
@@ -75,9 +70,6 @@ function ensureTableView(container) {
         manufacturer: infoRow.querySelector('.manufacturer'),
         manufacturerSeparator: infoRow.querySelector('.manufacturer-separator'),
         year: infoRow.querySelector('.year'),
-        version: infoRow.querySelector('.version'),
-        versionSeparator: infoRow.querySelector('.version-separator'),
-        authors: infoRow.querySelector('.table-authors'),
     };
     return tableView;
 }

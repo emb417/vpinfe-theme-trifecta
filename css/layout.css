@@ -65,8 +65,7 @@
     font-weight: 500;
 }
 
-.info-line-meta,
-.info-line-authors {
+.info-line-meta {
     font-size: 0.95rem;
     color: rgba(255, 255, 255, 0.85);
 }
@@ -84,15 +83,6 @@
 .manufacturer,
 .year {
     color: #ffb95d;
-}
-
-.version {
-    color: #ffb95d;
-}
-
-.table-authors {
-    color: rgba(255, 255, 255, 0.7);
-    font-style: italic;
 }
 
 /* Empty line takes up space but shows nothing */
