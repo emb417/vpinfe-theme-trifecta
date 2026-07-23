@@ -19,8 +19,12 @@ function applyMediaRotation(element) {
   if (!element) return;
 
   const normalized = ((tableRotationDegrees % 360) + 360) % 360;
-  const swapAxes = normalized === 90 || normalized === 270;
-  const mediaRotation = swapAxes ? -tableRotationDegrees : tableRotationDegrees;
+  const swapAxes = normalized === 90 || normalized === 270 || isNativePortrait;
+  const mediaRotation = isNativePortrait
+    ? 90
+    : swapAxes
+      ? -tableRotationDegrees
+      : tableRotationDegrees;
 
   if (swapAxes) {
     element.style.width = "177.78%";
