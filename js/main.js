@@ -54,12 +54,7 @@ vpin.ready.then(async () => {
       return false;
     }
 
-    const initialIndex = await vpin
-      .call("get_current_table_index")
-      .catch(() => {
-        return 0;
-      });
-    currentTableIndex = initialIndex || 0;
+    currentTableIndex = vpin.getCurrentTableIndex();
 
     if (windowName === "table") {
       updateScreen();
