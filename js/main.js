@@ -24,10 +24,6 @@ vpin.ready.then(async () => {
 
   vpin.registerInputHandler(handleInput);
 
-  config = await vpin.call("get_theme_config");
-
-  const keymap = (config && config.input && config.input.keymap) || {};
-
   if (windowName === "table") {
     await applyTableLayout();
     window.addEventListener("resize", () => {
@@ -35,17 +31,6 @@ vpin.ready.then(async () => {
         updateTableWindowCarousel();
         updateTableWindowHeroMedia();
       });
-    });
-    window.addEventListener("keydown", (e) => {
-      if (isGameRunning) return;
-      const action =
-        keymap[e.code] || keymap[e.key] || keymap[e.key.toLowerCase()];
-
-      if (action === "collection") {
-        vpin.toggleCollectionMenu();
-      } else if (action === "select") {
-        handleInput("joyselect");
-      }
     });
   }
 

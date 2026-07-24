@@ -290,18 +290,16 @@ Place `audio.mp3` files in each table's `medias/` folder. VPinFECore automatical
 
 ```json
 {
-  "use_core_audio": true,
-  "input": {
-    "keymap": {
-      "ControlRight": "collection",
-      "Digit1": "select"
-    }
-  }
+  "use_core_audio": true
 }
 ```
 
 - **`use_core_audio`** - Enable VPinFECore's centralized audio manager
-- **`input.keymap`** - Custom keyboard shortcuts (accessed in `main.js`)
+
+Keyboard and joystick bindings are handled by VPinFE's input system, not the
+theme. Configure them in the `[Input]` section of `vpinfe.ini` (for example
+`keyselect` and `keycollectionmenu`) so they follow the same bindings as the
+rest of the frontend.
 
 ### Window Overrides (Advanced)
 
