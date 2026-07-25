@@ -14,6 +14,7 @@ let lastWheelMoveDirection = 0;
 // Display configuration
 let isTablePortrait = false;
 let tableRotationDegrees = 0;
+let isNativePortrait = false;
 
 // Configuration
 let config = null;

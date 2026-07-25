@@ -12,15 +12,21 @@ async function applyTableLayout() {
 
   const cabMode = await vpin.call("get_cab_mode");
   const rotationDegree = await vpin.call("get_table_rotation");
+  const orientation = String(
+    (await vpin.call("get_table_orientation")) || ""
+  ).toLowerCase();
   tableRotationDegrees = rotationDegree;
   const normalized = ((rotationDegree % 360) + 360) % 360;
   const swapAxes = normalized === 90 || normalized === 270;
-  isTablePortrait = swapAxes;
+  // Portrait display pre-rotated by the OS: the window is already portrait
+  // and rotation is 0, so lay out portrait natively without rotating.
+  isNativePortrait = orientation === "portrait" && normalized === 0;
+  isTablePortrait = swapAxes || isNativePortrait;
 
   const vw = window.innerWidth;
   const vh = window.innerHeight;
-  const baseWidth = swapAxes ? 1080 : 1920;
-  const baseHeight = swapAxes ? 1920 : 1080;
+  const baseWidth = isTablePortrait ? 1080 : 1920;
+  const baseHeight = isTablePortrait ? 1920 : 1080;
   const scale = swapAxes
     ? Math.min(vw / baseHeight, vh / baseWidth)
     : Math.min(vw / baseWidth, vh / baseHeight);
