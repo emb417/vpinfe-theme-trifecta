@@ -1,10 +1,4 @@
 {
   "_comment": "Trifecta Theme Configuration - Optional customization settings",
-  "use_core_audio": true,
-  "input": {
-    "keymap": {
-      "ControlRight": "collection",
-      "Digit1": "select"
-    }
-  }
+  "use_core_audio": true
 }

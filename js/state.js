@@ -17,7 +17,6 @@ let tableRotationDegrees = 0;
 let isNativePortrait = false;
 
 // Configuration
-let config = null;
 let windowOverride = null;
 
 // Debounce timers
