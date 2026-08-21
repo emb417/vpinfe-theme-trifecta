@@ -22,9 +22,8 @@ vpin.ready.then(async () => {
     windowName = result;
   });
 
-  vpin.registerInputHandler(handleInput);
-
   if (windowName === "table") {
+    vpin.registerInputHandler(handleInput);
     await applyTableLayout();
     window.addEventListener("resize", () => {
       applyTableLayout().then(() => {
